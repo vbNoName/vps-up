@@ -88,3 +88,16 @@ sudo ufw enable
 Дополнительно можно включить
 * Fail2ban и IP Limit
 * BBR
+
+## Selfsteal (свой сайт и сертификат для Reality)
+
+Скрипт [setup-selfsteal.sh](./scripts/setup-selfsteal.sh) ставит nginx с сайтом-заглушкой и сертификатом Let's Encrypt
+на `127.0.0.1:8443` и проксирует туда панель 3x-ui по секретному пути того же домена.
+Reality inbound на 443 потом пересылает чужие подключения на этот nginx.
+Inbound'ы, настройки панели, Xray и файрвол скрипт не меняет: что сделать вручную, он выведет в конце.
+
+Подробно: [docs/selfsteal.md](./docs/selfsteal.md)
+
+```shell
+curl -fsSL https://raw.githubusercontent.com/vbNoName/vps-up/main/scripts/setup-selfsteal.sh | sudo bash -s -- --domain vpn.example.com --panel-port 2053 --panel-path /secret-path/ --email admin@example.com
+```

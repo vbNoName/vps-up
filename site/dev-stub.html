@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Сайт на реконструкции</title>
+    <meta name="description" content="Сайт студии веб-разработки временно на реконструкции. Мы скоро вернёмся.">
+    <meta name="theme-color" content="#0a0c10">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0c10'/%3E%3Cpath d='M25 20 13 32l12 12M39 20l12 12-12 12' stroke='%237cf5c4' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <style>
+        :root {
+            --bg: #0a0c10;
+            --surface: #10141b;
+            --surface-2: #151a23;
+            --line: rgba(255, 255, 255, .08);
+            --text: #e9edf4;
+            --muted: #8a94a6;
+            --accent: #7cf5c4;
+            --accent-2: #6aa8ff;
+            --warn: #ffcc66;
+            --radius: 18px;
+            --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+            color-scheme: dark;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font: 16px/1.6 var(--sans);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ---------- Фон ---------- */
+        .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                    linear-gradient(var(--line) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 56px 56px;
+            -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, #000 25%, transparent 80%);
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, #000 25%, transparent 80%);
+        }
+        .blob {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: .22;
+            animation: float 18s ease-in-out infinite alternate;
+        }
+        .blob.a { background: var(--accent); top: -180px; left: -140px; }
+        .blob.b { background: var(--accent-2); bottom: -220px; right: -160px; animation-delay: -9s; }
+        @keyframes float { to { transform: translate(90px, 70px) scale(1.12); } }
+
+        /* ---------- Каркас ---------- */
+        .wrap {
+            max-width: 1160px;
+            min-height: 100%;
+            margin: 0 auto;
+            padding: 28px clamp(16px, 4vw, 40px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.01em; }
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: linear-gradient(135deg, rgba(124, 245, 196, .16), rgba(106, 168, 255, .16));
+            color: var(--accent);
+            font: 600 14px var(--mono);
+        }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .02);
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--warn);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(255, 204, 102, .55); }
+            70%  { box-shadow: 0 0 0 10px rgba(255, 204, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 204, 102, 0); }
+        }
+
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            align-items: center;
+            gap: clamp(36px, 5vw, 72px);
+            padding: clamp(40px, 8vh, 96px) 0;
+        }
+
+        /* ---------- Текст ---------- */
+        .eyebrow {
+            margin: 0 0 18px;
+            color: var(--accent);
+            font: 500 13px var(--mono);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        h1 {
+            margin: 0 0 22px;
+            font-size: clamp(40px, 6.2vw, 76px);
+            font-weight: 800;
+            line-height: 1.02;
+            letter-spacing: -.035em;
+        }
+        h1 .grad {
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .lead { max-width: 34em; margin: 0 0 36px; color: var(--muted); font-size: clamp(17px, 1.6vw, 19px); }
+
+        /* ---------- Прогресс ---------- */
+        .progress { max-width: 540px; margin-bottom: 38px; }
+        .progress-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .progress-head .pct { color: var(--accent); font-family: var(--mono); }
+        .bar { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .06); overflow: hidden; }
+        .bar i {
+            position: relative;
+            display: block;
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: width 1.8s cubic-bezier(.2, .8, .2, 1);
+            overflow: hidden;
+        }
+        .bar i::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent);
+            transform: translateX(-100%);
+            animation: shine 2.4s 2s ease-in-out infinite;
+        }
+        @keyframes shine { to { transform: translateX(100%); } }
+
+        .steps { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+        .steps li {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 12px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .steps li::before { content: "○"; font-size: 11px; }
+        .steps li.done { color: var(--text); }
+        .steps li.done::before { content: "✓"; color: var(--accent); font-size: 13px; }
+        .steps li.active { border-color: rgba(124, 245, 196, .4); background: rgba(124, 245, 196, .06); color: var(--accent); }
+        .steps li.active::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: blink 1s steps(2) infinite;
+        }
+
+        /* ---------- Редактор ---------- */
+        .editor-wrap { position: relative; }
+        .editor-wrap::before {
+            content: "";
+            position: absolute;
+            inset: 10% 5%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            filter: blur(70px);
+            opacity: .18;
+        }
+        .editor {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, var(--surface-2), var(--surface));
+            box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .65);
+            overflow: hidden;
+            transform: perspective(1200px) rotateY(-7deg) rotateX(2deg);
+            transition: transform .6s cubic-bezier(.2, .8, .2, 1);
+        }
+        .editor:hover { transform: none; }
+        .editor-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, .02);
+        }
+        .editor-bar i { width: 12px; height: 12px; border-radius: 50%; }
+        .editor-bar i:nth-child(1) { background: #ff5f57; }
+        .editor-bar i:nth-child(2) { background: #febc2e; }
+        .editor-bar i:nth-child(3) { background: #28c840; }
+        .editor-bar .file { margin-left: 10px; color: var(--muted); font: 12.5px var(--mono); }
+
+        .code {
+            display: grid;
+            margin: 0;
+            padding: 22px 22px 26px;
+            color: #c9d3e3;
+            font: 14px/1.75 var(--mono);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .code > code { grid-area: 1 / 1; font: inherit; }
+        .code > .is-ghost { visibility: hidden; }
+
+        .c-com { color: #5f6d83; font-style: italic; }
+        .c-kw  { color: #c792ea; }
+        .c-fn  { color: #82aaff; }
+        .c-str { color: #c3e88d; }
+        .c-key { color: #7fdbca; }
+        .c-num { color: #f78c6c; }
+        .c-p   { color: #89ddff; }
+
+        .caret {
+            display: inline-block;
+            width: 8px;
+            height: 1.15em;
+            margin-left: 1px;
+            vertical-align: -3px;
+            background: var(--accent);
+            animation: blink 1s steps(2) infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .editor-foot {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px 16px;
+            border-top: 1px solid var(--line);
+            background: rgba(255, 255, 255, .02);
+            color: var(--muted);
+            font: 12px var(--mono);
+        }
+        .editor-foot span:first-child { color: var(--warn); }
+
+        /* ---------- Подвал ---------- */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* ---------- Адаптив ---------- */
+        @media (max-width: 920px) {
+            main { grid-template-columns: 1fr; }
+            .editor { transform: none; }
+        }
+        @media (max-width: 480px) {
+            .code { padding: 18px 16px 20px; font-size: 12.5px; }
+            .editor-foot span:last-child { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+    <div class="blob a"></div>
+    <div class="blob b"></div>
+</div>
+
+<div class="wrap">
+    <header>
+        <div class="logo">
+            <span class="logo-mark">&lt;/&gt;</span>
+            <span>Студия веб-разработки</span>
+        </div>
+        <span class="status"><span class="dot"></span>Идут работы</span>
+    </header>
+
+    <main>
+        <section>
+            <p class="eyebrow">503 · Плановое обновление</p>
+            <h1>Сайт на <span class="grad">реконструкции</span></h1>
+            <p class="lead">
+                Мы полностью обновляем наш сайт: новый дизайн, быстрая загрузка и&nbsp;удобство на&nbsp;любых устройствах.
+                Совсем скоро всё заработает — заглядывайте чуть позже.
+            </p>
+
+            <!-- Процент готовности меняется в data-progress -->
+            <div class="progress" data-progress="72">
+                <div class="progress-head">
+                    <span>Готовность</span>
+                    <span class="pct">0%</span>
+                </div>
+                <div class="bar"><i></i></div>
+                <ul class="steps">
+                    <li class="done">Проектирование</li>
+                    <li class="done">Дизайн</li>
+                    <li class="active">Разработка</li>
+                    <li>Тестирование</li>
+                    <li>Запуск</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="editor-wrap" aria-hidden="true">
+            <div class="editor">
+                <div class="editor-bar">
+                    <i></i><i></i><i></i>
+                    <span class="file">rebuild.js</span>
+                </div>
+                <pre class="code"><code id="ghost"><span class="c-com">// обновляем сайт</span>
+<span class="c-kw">const</span> site = <span class="c-kw">await</span> studio.<span class="c-fn">rebuild</span><span class="c-p">({</span>
+  <span class="c-key">design</span><span class="c-p">:</span>   <span class="c-str">"новый"</span><span class="c-p">,</span>
+  <span class="c-key">speed</span><span class="c-p">:</span>    <span class="c-str">"x2"</span><span class="c-p">,</span>
+  <span class="c-key">mobile</span><span class="c-p">:</span>   <span class="c-num">true</span><span class="c-p">,</span>
+  <span class="c-key">seo</span><span class="c-p">:</span>      <span class="c-str">"на максимум"</span><span class="c-p">,</span>
+<span class="c-p">});</span>
+
+<span class="c-kw">await</span> site.<span class="c-fn">test</span><span class="c-p">();</span>
+site.<span class="c-fn">launch</span><span class="c-p">();</span> <span class="c-com">// совсем скоро</span></code><code id="typed"></code></pre>
+                <div class="editor-foot">
+                    <span>● build в процессе</span>
+                    <span>UTF-8 · JavaScript</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <span>© <span id="year">2026</span> Студия веб-разработки</span>
+        <span>Спасибо за терпение — делаем лучше для вас.</span>
+    </footer>
+</div>
+
+<script>
+    (() => {
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Прогресс-бар и счётчик процентов
+        const progress = document.querySelector('.progress');
+        const target = Math.max(0, Math.min(100, +progress.dataset.progress || 0));
+        const fill = progress.querySelector('.bar i');
+        const pct = progress.querySelector('.pct');
+        setTimeout(() => { fill.style.width = target + '%'; }, 150);
+        if (reduce) {
+            pct.textContent = target + '%';
+        } else {
+            const start = performance.now() + 150, duration = 1800;
+            const tick = (now) => {
+                const p = Math.min(Math.max((now - start) / duration, 0), 1);
+                pct.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + '%';
+                if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        }
+
+        // Печать кода в редакторе: исходник берётся из #ghost, он же резервирует высоту
+        if (reduce) return;
+        const ghost = document.getElementById('ghost');
+        const typed = document.getElementById('typed');
+        const tokens = [...ghost.childNodes].map(n => [n.nodeType === 1 ? n.className : '', n.textContent]);
+        const flat = tokens.map(t => t[1]).join('');
+        const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+        const render = (n) => {
+            let html = '';
+            for (const [cls, text] of tokens) {
+                if (n <= 0) break;
+                const part = text.slice(0, n);
+                n -= part.length;
+                html += cls ? `<span class="${cls}">${esc(part)}</span>` : esc(part);
+            }
+            return html + '<span class="caret"></span>';
+        };
+
+        ghost.classList.add('is-ghost');
+        let i = 0;
+        const step = () => {
+            typed.innerHTML = render(i);
+            if (i === flat.length) return;
+            const delay = flat[i] === '\n' ? 280 : 20 + Math.random() * 50;
+            i++;
+            setTimeout(step, delay);
+        };
+        setTimeout(step, 700);
+    })();
+</script>
+</body>
+</html>
